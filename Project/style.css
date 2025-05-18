@@ -1,0 +1,138 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fef9f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 1rem;
+  }
+  
+  /* Header & Navigation */
+  header {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #ffecd2;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+  
+  header h1 {
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+  }
+  
+  nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #333;
+    background-color: #ffe0b2;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: background-color 0.2s ease;
+  }
+  
+  nav a:hover {
+    background-color: #ffb74d;
+    color: white;
+  }
+  
+  /* Main Content */
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  #fact-box, .question-box {
+    background-color: #fff3e0;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  #fact-text, .question-box p {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Buttons */
+  button, .answer-btn {
+    margin: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    background-color: #ffcc80;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  button:hover, .answer-btn:hover {
+    background-color: #ffb74d;
+    color: white;
+  }
+  
+  /* Favorites List */
+  #favorites-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #favorites-list li {
+    background-color: #fff8e1;
+    padding: 0.75rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .delete-btn {
+    background-color: #ef5350;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.25rem 0.6rem;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .delete-btn:hover {
+    background-color: #c62828;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    nav {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  
+    button, .answer-btn {
+      width: 100%;
+    }
+  
+    header h1 {
+      font-size: 1.5rem;
+    }
+  
+    #fact-text, .question-box p {
+      font-size: 1.1rem;
+    }
+  }

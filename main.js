@@ -1,42 +1,31 @@
-const factText = document.getElementById("fact-text");
-const nextBtn = document.getElementById("next-btn");
-const saveBtn = document.getElementById("save-btn");
-const shareBtn = document.getElementById("share-btn");
+export default async function handler(req, res) {
+  console.log("Received request:", req.method);
+  
+  if (req.method === 'POST') {
+    try {
+      const body = JSON.parse(req.body);
+      console.log("Parsed body:", body);
 
-let currentFact = "";
+      if (!body.fact) {
+        console.error("Missing fact in body");
+        return res.status(400).json({ error: "Missing fact" });
+      }
 
-async function getCatFact() {
-  try {
-    const response = await fetch("https://catfact.ninja/fact");
-    const data = await response.json();
-    currentFact = data.fact;
-    factText.textContent = currentFact;
-  } catch (error) {
-    factText.textContent = "Could not load cat fact.";
-    console.error("Fetch error:", error);
-  }
-}
+      const { data, error } = await supabase.from('favorites').insert([{ fact: body.fact }]);
 
-async function saveFact() {
-  try {
-    const response = await fetch("/api/favorites", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ fact: currentFact })
-    });
+      if (error) {
+        console.error("Supabase error:", error);
+        return res.status(500).json({ error });
+      }
 
-    const data = await response.json();
+      console.log("Successfully saved:", data);
+      return res.status(200).json(data);
 
-    if (response.ok) {
-      alert("Fact saved to Supabase!");
-    } else {
-      console.error("Save failed:", data);
-      alert("Error saving fact.");
+    } catch (err) {
+      console.error("JSON parse error:", err);
+      return res.status(400).json({ error: "Invalid JSON" });
     }
-  } catch (error) {
-    console.error("Save error:", error);
-    alert("Save failed. Check backend.");
   }
+
+  return res.status(405).json({ error: "Method Not Allowed" });
 }

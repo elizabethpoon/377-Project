@@ -7,13 +7,7 @@ let currentFact = "";
 
 async function getCatFact() {
   try {
-    const response = await fetch("/api/favorites", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ fact: currentFact })
-    });
+    const response = await fetch("https://catfact.ninja/fact");
     const data = await response.json();
     currentFact = data.fact;
     factText.textContent = currentFact;
@@ -26,11 +20,7 @@ async function getCatFact() {
 // Save current fact to Supabase through your backend
 async function saveFact() {
   try {
-    const response = await fetch("http://localhost:3000/api/favorites", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fact: currentFact }),
-    });
+    const data = await response.json()
 
     if (response.ok) {
       alert("Fact saved to Supabase!");

@@ -14,4 +14,6 @@ Chrome (latest desktop & Android)
 - Firefox
 - Microsoft Edge
   
-##Link to Developer Manual: 
+##Link to Developer Manual:
+https://github.com/elizabethpoon/377-Project/blob/main/docs/DeveloperManual.Md
+

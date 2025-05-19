@@ -18,6 +18,7 @@ async function getCatFact() {
 }
 
 async function saveFact() {
+  console.log("Saving fact:", currentFact); // helpful log
   try {
     const response = await fetch("/api/favorites", {
       method: "POST",
@@ -40,3 +41,22 @@ async function saveFact() {
     alert("Save failed. Check backend.");
   }
 }
+
+nextBtn.addEventListener("click", getCatFact);
+saveBtn.addEventListener("click", saveFact);
+shareBtn.addEventListener("click", shareFact);
+
+function shareFact() {
+  if (navigator.share) {
+    navigator.share({
+      title: "Cat Fact 🐱",
+      text: currentFact,
+      url: window.location.href,
+    });
+  } else {
+    navigator.clipboard.writeText(currentFact);
+    alert("Copied to clipboard!");
+  }
+}
+
+getCatFact();

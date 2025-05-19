@@ -8,40 +8,34 @@ const supabase = createClient(
 export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      const { data, error } = await supabase.from('favorites').select('fact');
-      if (error) {
-        console.error('Supabase GET error:', error);
-        return res.status(500).json({ error: 'Error fetching facts from Supabase' });
-      }
+      const { data, error } = await supabase.from('favorites').select('*');
+      if (error) return res.status(500).json({ error });
       return res.status(200).json(data);
     }
 
     if (req.method === 'POST') {
-      let body = {};
-      try {
-        body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      } catch (err) {
-        return res.status(400).json({ error: 'Invalid JSON in request body' });
-      }
-
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
       const { fact } = body;
-      if (!fact) {
-        return res.status(400).json({ error: 'Missing "fact" in request body' });
-      }
+      if (!fact) return res.status(400).json({ error: 'Missing fact' });
 
       const { data, error } = await supabase.from('favorites').insert([{ fact }]);
-      if (error) {
-        console.error('Supabase INSERT error:', error);
-        return res.status(500).json({ error: 'Error saving fact' });
-      }
-
+      if (error) return res.status(500).json({ error });
       return res.status(200).json(data);
     }
 
-    return res.status(405).json({ error: 'Method Not Allowed' });
+    if (req.method === 'DELETE') {
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+      const { id } = body;
+      if (!id) return res.status(400).json({ error: 'Missing id' });
 
-  } catch (err) {
-    console.error('Unhandled error:', err);
-    return res.status(500).json({ error: 'Server crashed unexpectedly' });
+      const { error } = await supabase.from('favorites').delete().eq('id', id);
+      if (error) return res.status(500).json({ error });
+      return res.status(200).json({ message: 'Deleted successfully' });
+    }
+
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  } catch (error) {
+    console.error("API error:", error);
+    return res.status(500).json({ error: 'Server error' });
   }
 }

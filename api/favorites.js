@@ -1,56 +1,26 @@
-import { createClient } from '@supabase/supabase-js';
+const favoritesList = document.getElementById("favorites-list");
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
-
-export default async function handler(req, res) {
+async function loadFavorites() {
   try {
-    console.log("Method:", req.method);
+    const response = await fetch("/api/favorites");
+    const facts = await response.json();
 
-    if (!supabase) {
-      console.error("Supabase client failed to initialize.");
-      return res.status(500).json({ error: "Supabase not initialized" });
+    if (!facts.length) {
+      favoritesList.innerHTML = "<li>No saved cat facts yet!</li>";
+      return;
     }
 
-    if (req.method === 'GET') {
-      const { data, error } = await supabase.from('favorites').select('*');
-      if (error) {
-        console.error("Supabase GET error:", error);
-        return res.status(500).json({ error });
-      }
-      return res.status(200).json(data);
-    }
+    favoritesList.innerHTML = ""; // clear existing content
 
-    if (req.method === 'POST') {
-      let body = {};
-      try {
-        body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      } catch (parseErr) {
-        console.error("Invalid JSON:", parseErr);
-        return res.status(400).json({ error: "Invalid JSON" });
-      }
-
-      const { fact } = body;
-      if (!fact) {
-        console.error("Missing 'fact' in body:", body);
-        return res.status(400).json({ error: "Missing 'fact'" });
-      }
-
-      const { data, error } = await supabase.from('favorites').insert([{ fact }]);
-      if (error) {
-        console.error("Supabase INSERT error:", error);
-        return res.status(500).json({ error });
-      }
-
-      return res.status(200).json(data);
-    }
-
-    return res.status(405).json({ error: "Method not allowed" });
-
+    facts.forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item.fact;
+      favoritesList.appendChild(li);
+    });
   } catch (error) {
-    console.error("Unhandled API error:", error);
-    return res.status(500).json({ error: "Unhandled server error" });
+    console.error("Error loading favorites:", error);
+    favoritesList.innerHTML = "<li>Error loading saved facts.</li>";
   }
 }
+
+loadFavorites();

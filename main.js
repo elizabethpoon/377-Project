@@ -5,10 +5,15 @@ const shareBtn = document.getElementById("share-btn");
 
 let currentFact = "";
 
-// Fetch a random cat fact from the external API
 async function getCatFact() {
   try {
-    const response = await fetch("https://catfact.ninja/fact");
+    const response = await fetch("/api/favorites", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ fact: currentFact })
+    });
     const data = await response.json();
     currentFact = data.fact;
     factText.textContent = currentFact;
@@ -40,7 +45,6 @@ async function saveFact() {
   }
 }
 
-// Share fact (Web Share API or fallback)
 function shareFact() {
   if (navigator.share) {
     navigator.share({

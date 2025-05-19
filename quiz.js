@@ -4,7 +4,6 @@ const quizContainer = document.getElementById("quiz-container");
 async function getFactsForQuiz() {
   let facts = JSON.parse(localStorage.getItem("savedFacts")) || [];
 
-  // Fetch more if not enough saved
   while (facts.length < 4) {
     const res = await fetch("https://catfact.ninja/fact");
     const data = await res.json();
